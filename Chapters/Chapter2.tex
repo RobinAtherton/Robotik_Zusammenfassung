@@ -1,0 +1,74 @@
+\chapter{Software-Architekturen für mobile Robotersysteme}
+\section{Probleme und Anforderungen}
+\subsection{Definition mobile Roboter}
+\enquote{Unter einem Roboter verstehen wir eine frei programmierbare Maschine, die auf Basis von Umgebungssensordaten in geschlossener Regelung in Umgebungen agiert, die zur Zeit der Programmierung nicht genau bekannt und/oder dynamisch und oder nicht vollständig erfassbar sind.}
+$\Rightarrow$ \textbf{Joachim Herzberg, Mobile Roboter}
+\subsection{Umgebung mobiler Roboter}
+Bei \textbf{mobilen Robtoern} ist die Umgebung im Detail \textbf{nicht bekannt und generell nicht kontrollierbar}
+\begin{itemize}
+	\item Alle Aktionen sind von der aktuellen Umgebung abhängig
+	\item Details sind erst zum Zeitpunkt der Ausführung der Aktionen bekannt
+	\item Mobile Roboter müssen in einer geschlossenen Regelung
+		\subitem die Umgebung mit Sensoren erfassen
+		\subitem die Daten auswerten
+		\subitem Aktionen daraus planen
+		\subitem Aktionen mittels Koordination der Aktuatoren umsetzen
+\end{itemize}
+\subsection{Roboterkontroll-Architekturen}
+\paragraph{Herausforderungen}
+\begin{itemize}
+	\item Robotersystem besteht aus den Gebieten \textbf{Wahrnehmung}, \textbf{Planung} und \textbf{Handlung}
+	\item Herausforderungen an eine Roboterkontroll-Architektur, sie muss:
+	\subitem Sensorwerte erfassen und auswerten
+	\subitem Pfade planen
+	\subitem Hindernisse vermeiden
+	\subitem Komplexe Algorithmen in langen Zeitzyklen ausführen
+\end{itemize}
+\paragraph{Probleme bei der Software-Erstellung zur Roboterkontrolle}
+\begin{itemize}
+	\item Roboter sind eingebettete Systeme, die in geschlossener Regelung laufen und die Sensorströme in \textbf{Echtzeit verarbeiten} müssen
+	\item Untschiedliche Aufgaben --> Unterschiedliche Zeitzyklen
+	\item Unterschiedlicher Zeitskalen --> kein standardisierter Kontroll- oder Datenfluss den die Architektur abbilden könnten
+	\item Für etliche algorithmische Teilprobleme sind \textbf{keine effizienten Verfahren} bekannt
+	\item \textbf{Prozessorkapazität ist begrenzt}
+\end{itemize}
+\subsection{Anforderungen an das Kontrollsystem eines autonomen Roboters}
+\paragraph{Robustheit}
+\begin{itemize}
+	\item Die Umgebung des Systems kann sich ständig ändern
+	\item Auf eine Umgebungsänderung sollte der Roboter sinnvoll reagieren und nicht verwirrt stehen bleiben.
+	\item Verwendete Modelle der Umgebung sind ungenau.
+\end{itemize}
+\paragraph{Unterschiedliche Ziele}
+\begin{itemize}
+	\item Der Roboter verfolgt zu einem Zeitpunkt eventuell Ziele, die im Konflikt zueinander stehen.
+	\item \textbf{Beispiel}: der Roboter soll ein bestimmtes Ziel ansteuern, dabei aber Hindernissen ausweichen.
+\end{itemize}
+\paragraph{Sensorwerte von mehreren Sensoren}
+\begin{itemize}
+	\item Sensordaten könen verrauscht sein
+	\item Sensoren können fehlerhafte oder inkonsistente Messwerte liefern, weil der Sensor z.B. außerhalb seines Bereichs misst für den er zuständig ist und dies nicht überprüfen kann.
+\end{itemize}
+\paragraph{Erweiterbarkeit}
+\begin{itemize}
+	\item Wenn der Roboter neue Sensoren erhält, sollte dies leicht in das Programm integriert werden können.
+\end{itemize}
+\section{Mögliche Modelle}
+\subsection{Klassisches Modell - der funktionale Ansatz}
+Das \textbf{klassische Model} wird auch als hierarchisches Model oder funktionales Model bezeichnet.
+Ist ein Top-Down Ansatz, besteht aus drei Abstraktionsebenen
+\begin{itemize}
+	\item Die unterste Ebene: \textbf{Pilot}
+	\item Mittlere Eben: \textbf{Navigator}
+	\item Oberste Ebene: \textbf{Planer}
+\end{itemize}
+\textbf{Sense-Think-Act-Cycle} oder \textbf{SMPA} (Sense - Model - Plan - Act).
+\begin{itemize}
+	\item Sensordaten, die vom Fahrzeut geliefert werden, werden in den zwei unteren Ebenen vorverarbeitet.
+	\item Konstruktion oder Aktualisierung eines Weltmodells
+	\item \textbf{Planer} ist die Basis aller Entscheidungen basieren auf dem zugrundelgenden Weltmodell
+	\item Tatsächliche Fahrbefehle werden durch unterste Ebene ausgeführt
+\end{itemize}
+Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktionieren resultiert daraus ein intelligentes Verhalten und die Erfüllung der Aufgabe.
+%Kapitel 2 seite 3
+
