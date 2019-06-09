@@ -1,0 +1,41 @@
+\input{Header/Header.tex}
+
+\begin{document}
+
+% Titelseite einfügen.
+\input{titlepage/titlepage.tex}
+\clearpage
+
+% Counter zurücksetzen. Römische Ziffern einstellen.
+\pagenumbering{Roman}
+\setcounter{page}{1}
+
+% Inhaltsverzeichnis generieren.
+\tableofcontents
+
+% Neue Seite. Counter zurücksetzen. Arabische Ziffern einstellen.
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% Kapitel einfügen.
+
+
+
+% Abbildungsverzeichnis generieren.
+\clearpage
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+
+% Tabellenverzeichnis generieren.
+%\clearpage
+%\addcontentsline{toc}{chapter}{\listtablename}
+%\listoftables
+
+% Listingverzeichnis generieren.
+\clearpage
+%\renewcommand{\lstlistlistingname}{Listingverzeichnis}
+\addcontentsline{toc}{chapter}{\lstlistlistingname}
+\lstlistoflistings
+
+\end{document}
