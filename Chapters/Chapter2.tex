@@ -70,5 +70,141 @@ Ist ein Top-Down Ansatz, besteht aus drei Abstraktionsebenen
 	\item Tatsächliche Fahrbefehle werden durch unterste Ebene ausgeführt
 \end{itemize}
 Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktionieren resultiert daraus ein intelligentes Verhalten und die Erfüllung der Aufgabe.
-%Kapitel 2 seite 3
-
+\paragraph{Nachteile}
+\begin{itemize}
+	\item \textbf{Sequentieller Ansatz}, \textbf{lange Kontrollzykluszeit}
+	\item Gesamtsystem anfällig, $\Rightarrow$ fällt ein Modul scheitert das Gesamtsystem
+	\item Die Repräsentation der Umgebung muss alle notwendigen Informationen enthalten, damit ein Plan entwickelt werden kann.
+	Planer hat nur Zugriff auf das Weltmodell $\Rightarrow$ während Planer aktionen ausarbeitet, könnte sich die Umwelt schon wieder geändert haben.
+\end{itemize}
+\subsection{Verhaltensbasiertes Modell}
+\paragraph{Grundlegender Gedanke} Intelligentes Verhalten wwird nicht durch komplexe, monolithische Kontrollstrukturen erzeugt, sondern durch das Zusammenführen der richtigen einfachen Verhalten und deren Interaktion.
+\paragraph{Definition}
+\begin{itemize}
+	\item Engere Verbindung zwischen \textbf{Wahrnehmung} und \textbf{Aktion}
+	\item Jede \textbf{Roboterfunktionalität} wird in einem \textbf{Behavior} gekapselt
+	\item Alle \textbf{Behaviors} werden \textbf{parallel ausgeführt}
+	\item Jedes Behavior Modul operiert unabhängig von den anderen
+	\item Alle Behaviors können auf alle Fahrzeugsensoren zugreifen und gewissermaßen die Aktuatoren ansteuern.
+\end{itemize}
+\paragraph{Beispiel}
+\textbf{Subsumption Architektur nach Brooks}
+\newpage
+\subsection{Hybrider Ansatz}
+\begin{itemize}
+	\item Nutzt die Vorteile der \textbf{Subsumption Architektur} und der \textbf{SMPA-Architektur}
+	\item Der verhaltensbasierte Anteil ist nicht geeignet, auf längere Sicht zielgerichtet Aktionen zu koordinieren $\Rightarrow$ SMPA-Anteil
+\end{itemize}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.9]{Resources/PDF/HybridModel}
+		\caption{Schema der Hybridmodell Schichten}
+		\label{fig:PDF/HybridModel}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item Die \textbf{Handlungsplanung} arbeitet auf hoher, strategischer Stufe in langen Zeitzyklen
+	\item Die \textbf{reaktive Aktionsüberwachung} enthält die Verhaltensbausteine auf operativer Ebene, die in schellen Zeitzyklen die physische Roboteraktion anstoßen und überwachen
+	\item die \textbf{mittlere Kontrollebene} hat die taktische Aufgabe, die jeweils \textbf{nächste Aktion aus dem Plan auszusuchen} zu instanzieren und auf die Ebene der Verhaltensbausteine zu zerlegen
+	Des weiteren muss die die Rückmeldung von der Aktionsüberwachung interpretieren und entscheiden ob eine Aktion erfolgreich abgeschlossen ist. $\Rightarrow$ entscheiden ob die Handlungsplanung einen anderen Plan erstellen muss
+\end{itemize}
+\newpage
+\paragraph{Kritik}
+\begin{itemize}
+	\item Mittlere Komponente benötigt den größten konzeptuellen und programmiertechnischen Aufwand
+	\item Das mittlere Teilproblem ist deutlich komplexer als die beiden anderen
+\end{itemize}
+\subsection{Probabilistische Robotik}
+\begin{itemize}
+	\item Probabilistische Robotik berücksichtigt die \textbf{Unsicherheit der Wahrnehmund und der Aktionen}
+	\item \textbf{Schlüsselidee} Information in Form von Wahrscheinlichkeitsdichten repräsentieren
+	\item Eine Lokalisierung der Roboter wird unter Verwendung von wahrscheinlichkeitstheorie oder einer Wahrscheinlichkeitsverteilung eine Aussage über die Umgebung treffen
+	\item \textbf{Probabilistische Wahrnehmung}: wenn man Sensorwerte schätzen kann, dann kann man mit Wahrscheinlichkeitstheorie/Wahscheinlichkeitsverteilung eine Aussage über die Umgebung treffen
+	\item \textbf{Probabilistisches Handeln}: aufgrund der Unsicherheit über die Umgebung ist auch das Handeln mit Unsicherheit behaftet.
+	Mit probabilistischen Ansätzen besteht die Möglichkeit Entscheidungen trotz Unsicherheit zu treffen
+\end{itemize}
+\paragraph{Vorteil} probabilistische Verfahren können auch mit weniger präzisen Umgebungsmodellen angewandt werden.
+\paragraph{Nachteil} weniger effizient wegen komplexer Berechnungen, Approximation erforderlich
+\subsection{Subsumption-Architektur in Bezug auf die Anforderungen des Robotersteuerungssystems}
+\paragraph{Robustheit}
+\begin{itemize}
+	\item Wenn einige Steuerungsmodule ausfallen, arbeiten bei der Subsumption-Architektur in die restlichen Schichten einwandfrei $\Rightarrow$ \textbf{eingeschränktes, aber sinnvolles Verhalten möglich}
+\end{itemize}
+\paragraph{Unterschiedliche Ziele}
+\begin{itemize}
+	\item Mehrere Teilsituation können verschiedene Verhaltenselemente sinvoll machen, die sich widersprechen können.
+	\item Die Wichtigkeit einer Handlung hängt vom Kontext ab, d.h. höhere Ziele können niederere Ziele ersetzen.
+	\item Alle zu einem Zeitpunkt möglichen Verhaltenselemente werden parallel bearbeitet.
+	\item Das \textbf{resultierende Verhalten wird in Abhängigkeit von Umwelteinflüssen dynamisch} bestimmt
+	\item Das Gesamtergebnis hängt nicht von einer übergeordneten Instanz ab
+\end{itemize}
+\paragraph{Sensorwerte von mehreren Sensoren}
+\begin{itemize}
+	\item Der Roboter muss auch bei inkonsistenten Informationen eine Entscheidung fällen
+	\item Die Subsumption-Architektur sieht keine zentrale Verarbeitung und Speichung der Umweltdaten
+	\item Jedes Modul reagiert nur auf die Daten einzelner Sensoren, es muss \textbf{kein konsistentes Abbild der Umwelt erschaffen werden}
+\end{itemize}
+\paragraph{Erweiterbarkeit}
+Das bestehende Verhalten kann jederzeit durch Hinzufügen weiterer Schichten um komplexere Funktionen erweitert werden
+\section{ROS - Robot Operating System}
+\subsection{Entwicklung}
+\begin{itemize}
+	\item \textbf{Das Architekturschema für Roboterkontrollsoftware} gibt es nicht $\Rightarrow$ deshalb heute auch Unterstützung der Roboter-Softwareentwicklung durch Middleware wie ROS
+	\item \textbf{Zweck}: soll die Entwicklung von Software für Roboter vereinfachen und wiederkehrende Aufgaben standardisieren
+	\item Standard für Robotoerkontrollsoftware
+\end{itemize}
+\subsection{Design Prinzipien}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[]{Resources/PDF/FileSystem}
+		\caption{Filesystem, das ROS zugrunde liegt}
+		\label{fig:PDF/FileSystem}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item Ein Package beinhaltet die ROS Prozesse, welche auch Nodes genannt werden
+	\item Komplexe Prozesse werden durch Netzwerke von Nodes bewerkstelligt
+	\item Roboterkontrollprogramm besteht aus vielen Prozessen, die potentiell über mehrere Rechner verteilt sein können
+	\item Wichtigster Knoten ist der Master $\Rightarrow$ Abwicklung der internen Kommunikation
+	\item Andere Knoten können nur starten, wenn ein Master existiert
+	\item Nodes müssen sich beim Master anmelden
+	\item Funktionalität (Kommandods, Ausführung v. Algorithemen) wird in eigenen Nodes realisiert
+	\item Nodes sind in verschiedene Prozesse getrennt $\Rightarrow$ fehlerhafte Knoten hat i.d. Regel wenig Auswirkungen auf die anderen
+	\item Knoten werden über Publish-Subscribe verknüpft
+	\item \textbf{Asynchrone Nachrichten} werden durch Topics ausgetauscht
+	\item \textbf{Synchrone Nachrichten} werden durch Services ausgetauscht
+\end{itemize}
+\subsection{Publish - Subscribe}
+\paragraph{Nodes} sind Software-Module, die die Verarbeitung durchführen. Sie kommunizieren über Topics miteinander und tauschen dabei Nachrichten.
+\paragraph{Kommunikation}
+Die Kommunikation basiert auf einem \textbf{Publish Subscribe Pattern}
+\begin{itemize}
+	\item Wenn Daten weitergegeben werden sollen, wird ein Publisher erzeugt
+	\item Publisher registriert sich beim Master und gibt Topics an
+	\item Daten können in anderen Knoten abgerufen werden -- dazu wird ein (oder mehrere) Subscriber angelegt
+	\item Subscriber frägt beim Master bezüglich gewünschten Topics an
+	\item Daten werden über TCP/IP Sockets übertragen
+\end{itemize}
+\paragraph{Topics}
+\begin{itemize}
+	\item Themen, zu denen die Nodes Messages versenden
+	\item Topics sind einfach Strings
+	\item Verschiedene Nodes können zu einem bestimmten Topic Nachrichten versenden
+	\item Ein Node kann sich prinzipiell zu mehreren Topics einschreiben und mehrere Topics publizieren
+\end{itemize}
+\paragraph{Services}
+\begin{itemize}
+	\item Nachteil von Publish Subscribe wird durch Services geschlossen
+	\item Sind eine weitere Art, wie Nodes kommunizieren können
+	\item Synchroner Nachrichtenaustausch mithilfe von Requests, welche von anderen Nodes mit einer Response beantwortet werden
+	\item Ein Knoten registriert eine Aktion (Service), namentlich beim Master
+	\item Ein Service Caller kann die Ausführung eines Services anstoßen, sobald dieser verfügbar ist
+	\item geeignet für RMI oder einmalige Anfragen
+\end{itemize}
+\paragraph{Messages}
+\begin{itemize}
+	\item werden von Nodes bei der Kommunikation
+	\item Messages sind streng typisierte, möglicherweise verschachtelte Datenstrukturen, die aus den primitiven Typen int, float, bool bestehen
+	\item Eine Message kann andere Messages oder Felder von Messages enthalten
+\end{itemize}
+%seite 25 kapitel 2
