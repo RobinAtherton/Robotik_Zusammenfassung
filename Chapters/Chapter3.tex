@@ -112,7 +112,86 @@
 	\item Die wichtigste Form von Umgebungsmodellen für mobile Roboter sind Umgebungskarten.
 	\item Die folgende Ausführungen beziehen sich auf geeignet Karten für \textbf{mobile, autonome Landfahrzeuge}
 \end{itemize}
-
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.42]{Resources/PNG/MapTypes.PNG}
+		\caption{}
+		\label{fig:PNG/MapTypes.PNG}
+	\end{center}
+\end{figure}
+\paragraph{Arten von Umgebungsmodellen}
+\begin{itemize}
+	\item \textbf{kontinuierliche metrische Karten}, zweidimensional oder dreidimensional:
+	\subitem jedes Objekt wird assoziiert mit Koordinaten
+	\item \textbf{diskrete metrische Karten, Grid Maps}, zweidimensional oder dreidimensional:
+	\subitem der Raum wird gleichmäßig oder ungleichmäßig aufgeteilt; Objekte werden mit Positionen innerhalb des Gitters assoziiert
+	\item \textbf{Hybrid Maps}
+	\item \textbf{Topologische Modelle} nur zweidimensional
+	\subitem im Vordergrund steht die Beziehung der Objekte zueinander
+\end{itemize}
+\subsection{Kontinuierliche Metrische Karten}
+\begin{itemize}
+	\item Metrische Lokalisierung, beruht auf Ultrashall oder Laserscannern
+	\item Exakte Beschreibung der Umgebung mit 2D oder 3D Modellen möglich
+	\item Die Positionen von Objekten der Umgebung werden durch ein Koordinatensystem repräsentiert.
+	\item \textbf{Vorteil}: detailliertes Bild der Umgebung
+	\item \textbf{Nachteil}: große, unstrukturierte Datenmengen erschweren die Pfadplanung
+\end{itemize}
+\subsection{Grid Maps - Rasterkarten}
+\begin{itemize}
+	\item Die Umwelt des Roboters wird in ein gleichmäßiges Raser oder Grid zerlegt.
+	\item Jede Zelle enthält den Belegtheitsgrad der Zelle $\Rightarrow$ zeigt an ob zelle mit einem Hindernis belegt ist oder nicht
+	\item Verschiedene Modelle verwenden unterschiedliche Werte
+	\subitem zwei Werten
+	\subitem freie Zellen, belegte Zellen und Zellen mit Mischbelegung
+	\subitem Prozentsatz der Belegungswahrscheinlichkeit
+	\item Notwendige Informatinoen sind z.B.:
+	\subitem x, y als Koordinaten (Zeile, Spalte) einer Zelle
+	\subitem Sensordaten des Roboters
+	\subitem ein boolscher Wert für den Zustand der Zelle
+	\item Die Werte in den Zellen sind unabhängig voneinander
+	\item Eine Steigerung der Messgenauigkeit der Sensoren führt dazu, dass die Rasterelemente immer kleiner werden
+	\item Für eine kompakte Notation können Grid Maps im 2-dimensionalen Raum mit Quadtrees im 3-dimensionalen mit Octtrees gespeichert werden
+\end{itemize}
+\paragraph{Gleichmäßige Gitterstruktur vs. Adaptiver Gitterstruktur}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Resources/PNG/Quadtrees.PNG}
+		\caption{}
+		\label{fig:PNG/Quadtrees.PNG}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item links oben zeigt die Objekte in einer gleichmäßigen Gitterstruktur
+	\item rechts oben zeigt die zugehörige Repräsentation über Belegtheiten der Zellen
+	\item speicherintensiv bei gleichmäßiger Unterteilung des Raums $\Rightarrow$ adaptive Unterteilung des Raums und Speicherung in Quadtrees oder bei 3. Dimension Octtrees
+\end{itemize}
+\subsection{Adaptive Unterteilung}
+\begin{itemize}
+	\item Ausgangszustand: Rechteck mit Hindernissen
+	\item Fläche wird unterteilt in 4 Rechtecke gleicher Größe
+	\item Jedes Rechteck wird rekursiv wieder in 4 Rechtecke unterteilt $\Rightarrow$ Quadtree
+	\item Attributierung der Knoten:
+	\subitem \textbf{Frei}: Rechteck enthält keinen Teil eines Hindernisses
+	\subitem \textbf{Belegt}: Rechteck ist vollständig von Hindernis belegt
+	\subitem \textbf{Gemischt}: Rechteck enthält Punkte, die zu einem Hindernis gehören, sowie solche die es nicht tun
+	\item Nur gemischte Knoten werden weiter unterteilt
+\end{itemize}
+\paragraph{Vorteile} schnell und leicht feststellbar, ob Punkt in einem Hindernis liegt
+\paragraph{Nachteile} 
+\begin{itemize}
+	\item Konturen der Objekte und der Freiraum zwischen ihnen wird unpräzise repräsentiert
+	\item Um die Datenfülle zu reduzieren, wird das Raster zu grob gewählt und dadurch ein möglicher Weg durch Mischpixel versperrt
+\end{itemize}
+\paragraph{Weiterer Verwendungszweck}
+Neben der reinen Lokalisierung können die Karten auch dazu verwendet werden eine Fahrspur (Trakektorie) zu berechnen.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Resources/PNG/Trajektorie}
+		\caption{}
+		\label{fig:PNG/Trajektorie}
+	\end{center}
+\end{figure}
 
 
 
