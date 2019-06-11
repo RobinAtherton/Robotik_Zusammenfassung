@@ -192,6 +192,49 @@ Neben der reinen Lokalisierung können die Karten auch dazu verwendet werden ein
 		\label{fig:PNG/Trajektorie}
 	\end{center}
 \end{figure}
+\subsection{Weitere Beispiele für Umgebungskarten}
+\begin{itemize}
+	\item Laserscan Karten
+	\item Bildbasierte Karten
+\end{itemize}
+\subsection{Topologische Karten}
+Bedingt geeignet zur Lokalisation, Haupteinsatzgebiet ist die Pfadplanung.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.42]{Resources/PNG/TopologischeKarte.PNG}
+		\caption{}
+		\label{fig:PNG/TopologischeKarte.PNG}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item Modelle bilden einen \textbf{Graphen}
+	\item \textbf{Knoten} entsprechen Orten oder Bereichen der Umgebung
+	\item Beziehungen zwischen den Orten werden durch \textbf{Kanten} modelliert.
+	\item Zwei Knoten sind durch eine Kante verbunden, wenn sie unmittelbar voneinander erreichbar sind.
+	\item \textbf{Gewichte}: Maß für die Länge der Wege
+	\item Ist die Länge der jeweiligen Wegstücke bekannt, lässt sich der kürzeste Weg finden.
+\end{itemize}
+\paragraph{Vorteile}
+\begin{itemize}
+	\item Kompaktheit
+	\item Gute Skalierbarkeit für welträumige Umgebungen.
+	\item Es gibt viele schnelle Algorithemn auf Graphen, die gut zur Pfadplanung eingesetzt werden können
+\end{itemize}
+\paragraph{Nachteil} Relevante Umgebungsmerkmale werden verdeckt. Landmarken werden schwerer erkannt.
+\subsection{Hybrid Maps}
+\begin{itemize}
+	\item Kombinieren metrische und topologische Ansätze
+	\item Ermöglichen Lokalisation und Kantenerstellung mit hoher Präzision
+	\item Erhalten die Kompaktheit der topologischen Ansätze
+\end{itemize}
+\paragraph{Abstraktions-basierter Ansatz}
+\begin{itemize}
+	\item Basis: konstruieren einer metrischen Karte der Umgebung
+	\item $\Rightarrow$ aufbau einer kompakten topologischen Repräsentation
+	\item \textbf{Vorteil} Effizient Planung eines Pfads zu einem gegebenen Ziel aufgrund der Abstraktion.
+	\item Die zugrunde liegende metrische Karte wird für Relokalisation und Hindernisvermeidung benötigt.
+\end{itemize}
+
 
 
 
