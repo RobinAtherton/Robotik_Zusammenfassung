@@ -234,7 +234,42 @@ Bedingt geeignet zur Lokalisation, Haupteinsatzgebiet ist die Pfadplanung.
 	\item \textbf{Vorteil} Effizient Planung eines Pfads zu einem gegebenen Ziel aufgrund der Abstraktion.
 	\item Die zugrunde liegende metrische Karte wird für Relokalisation und Hindernisvermeidung benötigt.
 \end{itemize}
-
+\section{Passive und Aktive Selbstlokalisierung}
+\subsection{Passive Verfahren}
+\begin{itemize}
+	\item bestimmen oder schätzen die Roboterposition mittels aktueller Sensorinformationen
+	\item beeinflussen \textbf{nicht} die Bewegung und Orientierung des Roboters
+	\item Lokalisierungsmodul beobachtet nur die Roboteroperationen
+	\item Roboter bewegt sich zufällig hin und her bzw. führt die zu erledigende Aufgabe durch
+\end{itemize}
+\subsection{Aktive Verfahren}
+\begin{itemize}
+	\item besitzen vollständige oder teilweise Kontrolle über die Bewegungen des Roboter und Ausrichtung der Sensoren
+	\item fähhrt gezielt bestimmte Orte an um Mehrdeutigkeiten zwischen mehreren Orten aufzulösen
+\end{itemize}
+\section{Landmarken}
+\subsection{Definition}
+\begin{itemize}
+	\item Als Landmarken werden \textbf{eindeutig identifizierbare Charakteristiken der Umwelt} bezeichnet, die von entsprechenden Sensoren erkannt werden können.
+\end{itemize}
+\paragraph{Landmarke}
+\begin{itemize}
+	\item ihre Position im Weltmodell ist bekannt
+	\item sichtbar von unterschiedlichen Positionen aus
+	\item erkennbar unter verschiedenen Belichtungen und Blickwinkeln
+	\item relative Position bestimmbar
+	\item stationär, oder dem Navigationsmechanismus musss die Bewegung bekannt sein
+\end{itemize}
+\paragraph{Vorteil} Navigation erfolgt mit der Umwelt selbst und nicht mittels erechneter Daten
+\subsection{Natürliche Landmarken}
+\begin{itemize}
+	\item Werden nicht zum Zweck der Positionsbestimmung aufgestellt, können aber dafür verwendet werden
+	\item Grundsätzlich Passiv
+\end{itemize}   
+\subsection{Künstliche Landmarken}
+\begin{itemize}
+	\item Markante Objekte, eigens zum Zwech der Positionsbestimmung in der Umgebung installiert.
+\end{itemize}
 
 
 
