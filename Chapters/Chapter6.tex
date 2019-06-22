@@ -286,7 +286,15 @@ Modell von Variablen und deren Abhängigkeiten als dynamisches Bayes-Netzwerk.
 	\subitem die Kontrollvariablen $u_t$
 	\subitem und die gemessenen, beobachteten Landmarken Positionen $z_t$
 	\item Der Roboter bewegt sich von $s_1$ nach $s_t$ mit einer Folge Kontrolleingaben $u_2, ... u_t$
-	%TODO Chapter 6 page 30
+	\item Der Roboterzustand $s_t$ zum Zeitpunkt $t$ ist lediglich vom Roboterzustand $s_t-1$ zum vorhergehenden Zeitpunkt und dem ausgeführten Steuerkommando $u_t$ des Roboters abhängig
+	\item Zum Zeitpunkt $t = 1$ beobachtet der Roboter die Landmarkenpositionen $\theta_1$ mittels $z_1$ zum Zeitpunkt $t = 2$ beobachtet er $\theta_2$ via $z_2$ und zum Zeitpunkt $t = 3$ wieder $\theta_1$
+	\item Die Beobachtung $z_t$ ist abhängig von der globalen Position der Landmarke $\theta_k$ und dem aktuellen Roboterzustand $s_t$
+	\item \textbf{FastSLAM} zerlegt das Problem
+	\subitem in die \textbf{Lokalisation} (Wissen über den vom Roboter zurückgelegten weg  $s_1, ... s_t$)
+	\subitem und einer Sammlung von einzelnen \textbf{Landmarken-schätzungen} $z_k$, die von der geschätzter Roboterpose abhängen
+	\item Zeitkomplexität von \textbf{FastSLAM} ist $O(f M)$
+	\subitem $f$ konstanter Faktor
+	\subitem $M$ Anzahl der Landmarken
 \end{itemize}
 
 
