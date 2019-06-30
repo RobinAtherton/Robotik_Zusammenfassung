@@ -20,8 +20,6 @@
 	\subitem interne Sensoren wie Potentiometer, Inkrementalsensoren, ...
 	\subitem externe Sensoren wie Stoßdämpfer, Stereo-Kamera, Infrarot, Ultraschall, ...
 \end{itemize}
-
-
 \subsection{Freiheitsgrade für Roboterbeine}
 \begin{itemize}
 	\item Um ein Bein bewegen zu können, sind mindestens zwei Freiheitsgrade notwendig
@@ -111,9 +109,53 @@ Dynamisches Gehen arbeitet mit Körperschwingungen: der Körperschwerpunkt befin
 	\item Alle Räder haben in der Regel Kontakt zum Untergrund
 	\item für \textbf{statisch stabile Fahrzeuge} braucht man mindestens drei Räder:
 	\subitem Zwei angetriebene Räder auf einer Achse mit einem oder zwei passiv mitlaufenden Stützrädern, die sich frei drehen können
-	\subitem Steuerung erfolgt durch verschiedene
-
+	\subitem Steuerung erfolgt durch verschiedene Geschwindigkeit angetriebener Räder
+	\subitem kinematisches Zentrum oft in der Mitte des Fahrzeugs
+	\item \textbf{dynamische Stabilität erfordert Bewegung}
 \end{itemize}
+\section{Kinematik mobiler Radroboter}
+\subsection{Holonomische Bewegung}
+Eine Bewegung heißt \textbf{holonomisch}, wenn das Objekt seine \textbf{Orientierung und seine Position unabhängig voneinander ändern} kann.
+\paragraph{Pose System}
+\begin{itemize}
+	\item Position eines Objekts auf einer Ebene kann mittels zweier Koordinaten angegeben werden
+	\item Die absolute Orientierung des Objektes wird mit einer dritten Koordinate angegeben, was zusammen ein Pose-System ergibt
+	\item Koordinaten des Pose Systems $\Rightarrow$ 2 für die Position in x,y Ebene; 1 für die absolute Orientierung
+\end{itemize}
+\subsection{Kinematik und Positionsveränderung für Zweiradandtrieb}
+\begin{itemize}
+	\item \textbf{Vorraussetung}: kreisförmiger Roboter mit Zweiradantrieb, Bewegung ist nur in der Ebene möglich
+	\item Position: Koordinaten $x,y$, Orientierung $\alpha$
+	\item Roboter misst zu diskreten Zeitpunkten $t$ den mit dem linken bzw. mit dem rechten Rad zurückgelegten Weg
+	\item $\Delta L$ und $\Delta R$ werden von Radwegsensoren ermittelt
+\end{itemize}
+\begin{itemize}
+	\item Der Drehwinkel $\Delta \alpha$ ist die Wegdifferenz des rechten und des linken Rades geteilt durch den Radabstand $D$ \\
+	$\Delta \alpha=\frac{\Delta R-\Delta L}{D}$
+	\item Die Wegstrecke ist der mittlere Weg \\
+	$\Delta s=\frac{\Delta L+\Delta R}{2}$
+	\item Positionsänderung bei Geradeausfahrt mit $\Delta L = \Delta R$ \\
+	$\Delta x=\Delta R * \cos (\alpha)$ \\
+	$\Delta y=\Delta L * \sin (\alpha)$
+\end{itemize}
+\subsection{Fortbewegung bei Omnidirektionalem Antrieb}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Resources/PNG/EinheitsVektoren.PNG}
+		\caption{Einheitsvektoren}
+		\label{fig:PNG/EinheitsVektoren.PNG}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item \textbf{Einheitsvektoren} geben die Richtungen an, in denen die Omniwheels von den drei Motoren angetrieben werden.
+	\item \textbf{Geschwindigkeitsvektoren} sind die Einheitsvektoren
+	\item Raddrehmomente $\alpha, \beta, \gamma$ proportional zur Winkelgeschwindigkeit des jeweiligen Rades
+	\item \textbf{Bewegungsvektor} $\vec{V}=\alpha \cdot \vec{A}+\beta \cdot \vec{B}+\gamma \cdot \vec{C}$
+\end{itemize}
+
+
+
+
 
 
 
