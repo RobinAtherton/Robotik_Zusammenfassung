@@ -228,6 +228,19 @@ L\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des R
 	\item \textbf{Kosten} $cost$
 \end{itemize}
 \paragraph{Funktionsweise}
+\begin{enumerate}
+	\item Alle Knoten werden als \textbf{unbesucht} markiert $\Rightarrow$ kreiert ein set namens \textbf{unbesuchtes Set}
+	\item Allen Knoten wird ein \textit{temporärer Distanzwert} zugeordnet.
+	\subitem Ursprungsknoten := 0
+	\subitem Alle anderen Knoten := $\infty$
+	\item Setzen des Ursprungsknoten als \textit{current} Knoten
+	\item Für den \textit{current} Knoten alle \textit{unbesuchten} Nachbarn betrachten und deren \textit{temporären Distanzwert berechnen}.
+	Vergleichen des \textit{temporären Distanzwert} mit dem \textit{jetzigen Distanzwert} innerhalb des Nachbarknotens.
+	Falls der temporäre Distanzwert kleiner ist als der jetzige Distanzwert innerhalb der nachbarn wird der temporäre Distanzwert eingetragen.
+	\item Sobald alle Nachbarn überprüft wurden und alle werte eingetragen sind, wird der betrachtete Knoten auf \textbf{besucht} gesetzt. Somit wird er aus dem angelegten Set entfernt und wird nicht mehr überprüft.
+	\item Sobald der Zielknoten als besucht markiert ist dann terminiert der Algorithmus, \textbf{else} wird der Knoten mit der niedrigsten temporären als neuer \textbf{current} Knoten gesetzt und schritt 4 wird wiederholt.
+\end{enumerate}
+
 %TODO Algorithmus
 \subsection{A*}
 \paragraph{Datenstrukturen}
