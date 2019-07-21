@@ -27,8 +27,8 @@ Bei \textbf{mobilen Robotern} ist die Umgebung im Detail \textbf{nicht bekannt u
 \paragraph{Probleme bei der Software-Erstellung zur Roboterkontrolle}
 \begin{itemize}
 	\item Roboter sind eingebettete Systeme, die in geschlossener Regelung laufen und die Sensorströme in \textbf{Echtzeit verarbeiten} müssen
-	\item Untschiedliche Aufgaben --> Unterschiedliche Zeitzyklen
-	\item Unterschiedlicher Zeitskalen --> kein standardisierter Kontroll- oder Datenfluss den die Architektur abbilden könnten
+	\item Untschiedliche Aufgaben $\Rightarrow$ Unterschiedliche Zeitzyklen
+	\item Unterschiedlicher Zeitskalen $\Rightarrow$ kein standardisierter Kontroll- oder Datenfluss den die Architektur abbilden könnten
 	\item Für etliche algorithmische Teilprobleme sind \textbf{keine effizienten Verfahren} bekannt
 	\item \textbf{Prozessorkapazität ist begrenzt}
 \end{itemize}
@@ -46,7 +46,7 @@ Bei \textbf{mobilen Robotern} ist die Umgebung im Detail \textbf{nicht bekannt u
 \end{itemize}
 \paragraph{Sensorwerte von mehreren Sensoren}
 \begin{itemize}
-	\item Sensordaten könen verrauscht sein
+	\item Sensordaten können verrauscht sein
 	\item Sensoren können fehlerhafte oder inkonsistente Messwerte liefern, weil der Sensor z.B. außerhalb seines Bereichs misst für den er zuständig ist und dies nicht überprüfen kann.
 \end{itemize}
 \paragraph{Erweiterbarkeit}
@@ -73,12 +73,12 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 \paragraph{Nachteile}
 \begin{itemize}
 	\item \textbf{Sequentieller Ansatz}, \textbf{lange Kontrollzykluszeit}
-	\item Gesamtsystem anfällig, $\Rightarrow$ fällt ein Modul scheitert das Gesamtsystem
+	\item \textbf{Gesamtsystem anfällig}, $\Rightarrow$ fällt ein Modul scheitert das Gesamtsystem
 	\item Die Repräsentation der Umgebung muss alle notwendigen Informationen enthalten, damit ein Plan entwickelt werden kann.
 	Planer hat nur Zugriff auf das Weltmodell $\Rightarrow$ während Planer aktionen ausarbeitet, könnte sich die Umwelt schon wieder geändert haben.
 \end{itemize}
 \subsection{Verhaltensbasiertes Modell}
-\paragraph{Grundlegender Gedanke} Intelligentes Verhalten wwird nicht durch komplexe, monolithische Kontrollstrukturen erzeugt, sondern durch das Zusammenführen der richtigen einfachen Verhalten und deren Interaktion.
+\paragraph{Grundlegender Gedanke} Intelligentes Verhalten wird nicht durch komplexe, monolithische Kontrollstrukturen erzeugt, sondern durch das Zusammenführen der richtigen einfachen Verhalten und deren Interaktion.
 \paragraph{Definition}
 \begin{itemize}
 	\item Engere Verbindung zwischen \textbf{Wahrnehmung} und \textbf{Aktion}
@@ -87,8 +87,6 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 	\item Jedes Behavior Modul operiert unabhängig von den anderen
 	\item Alle Behaviors können auf alle Fahrzeugsensoren zugreifen und gewissermaßen die Aktuatoren ansteuern.
 \end{itemize}
-\paragraph{Beispiel}
-\textbf{Subsumption Architektur nach Brooks}
 \newpage
 \subsection{Hybrider Ansatz}
 \begin{itemize}
@@ -104,11 +102,10 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 \end{figure}
 \begin{itemize}
 	\item Die \textbf{Handlungsplanung} arbeitet auf hoher, strategischer Stufe in langen Zeitzyklen
+	\item die \textbf{mittlere Kontrollebene} hat die taktische Aufgabe, die jeweils \textbf{nächste Aktion aus dem Plan auszusuchen}, zu instanzieren und auf die Ebene der Verhaltensbausteine zu zerlegen
+	Des weiteren muss die die Rückmeldung von der Aktionsüberwachung interpretieren und entscheiden ob eine Aktion erfolgreich abgeschlossen ist. $\Rightarrow$ entscheiden, ob die Handlungsplanung einen anderen Plan erstellen muss
 	\item Die \textbf{reaktive Aktionsüberwachung} enthält die Verhaltensbausteine auf operativer Ebene, die in schellen Zeitzyklen die physische Roboteraktion anstoßen und überwachen
-	\item die \textbf{mittlere Kontrollebene} hat die taktische Aufgabe, die jeweils \textbf{nächste Aktion aus dem Plan auszusuchen} zu instanzieren und auf die Ebene der Verhaltensbausteine zu zerlegen
-	Des weiteren muss die die Rückmeldung von der Aktionsüberwachung interpretieren und entscheiden ob eine Aktion erfolgreich abgeschlossen ist. $\Rightarrow$ entscheiden ob die Handlungsplanung einen anderen Plan erstellen muss
 \end{itemize}
-\newpage
 \paragraph{Kritik}
 \begin{itemize}
 	\item Mittlere Komponente benötigt den größten konzeptuellen und programmiertechnischen Aufwand
@@ -117,8 +114,8 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 \subsection{Probabilistische Robotik}
 \begin{itemize}
 	\item Probabilistische Robotik berücksichtigt die \textbf{Unsicherheit der Wahrnehmung und der Aktionen}
-	\item \textbf{Schlüsselidee} Information in Form von Wahrscheinlichkeitsdichten repräsentieren
-	\item Eine Lokalisierung der Roboter wird unter Verwendung von wahrscheinlichkeitstheorie oder einer Wahrscheinlichkeitsverteilung eine Aussage über die Umgebung treffen
+	\item \textbf{Schlüsselidee}: Information in Form von Wahrscheinlichkeitsdichten repräsentieren
+	\item Eine Lokalisierung der Roboter wird unter Verwendung von Wahrscheinlichkeitstheorie oder einer Wahrscheinlichkeitsverteilung eine Aussage über die Umgebung treffen
 	\item \textbf{Probabilistische Wahrnehmung}: wenn man Sensorwerte schätzen kann, dann kann man mit Wahrscheinlichkeitstheorie eine Aussage über die Umgebung treffen
 	\item \textbf{Probabilistisches Handeln}: aufgrund der Unsicherheit über die Umgebung ist auch das Handeln mit Unsicherheit behaftet.
 	Mit probabilistischen Ansätzen besteht die Möglichkeit Entscheidungen trotz Unsicherheit zu treffen
@@ -128,11 +125,11 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 \subsection{Subsumption-Architektur in Bezug auf die Anforderungen des Robotersteuerungssystems}
 \paragraph{Robustheit}
 \begin{itemize}
-	\item Wenn einige Steuerungsmodule ausfallen, arbeiten bei der Subsumption-Architektur in die restlichen Schichten einwandfrei $\Rightarrow$ \textbf{eingeschränktes, aber sinnvolles Verhalten möglich}
+	\item Wenn einige Steuerungsmodule ausfallen, arbeiten bei der Subsumption-Architektur die restlichen Schichten einwandfrei $\Rightarrow$ \textbf{eingeschränktes, aber sinnvolles Verhalten möglich}
 \end{itemize}
 \paragraph{Unterschiedliche Ziele}
 \begin{itemize}
-	\item Mehrere Teilsituation können verschiedene Verhaltenselemente sinvoll machen, die sich widersprechen können.
+	\item Mehrere Teilsituationen können verschiedene Verhaltenselemente sinvoll machen, die sich widersprechen können.
 	\item Die Wichtigkeit einer Handlung hängt vom Kontext ab, d.h. höhere Ziele können niederere Ziele ersetzen.
 	\item Alle zu einem Zeitpunkt möglichen Verhaltenselemente werden parallel bearbeitet.
 	\item Das \textbf{resultierende Verhalten wird in Abhängigkeit von Umwelteinflüssen dynamisch} bestimmt
@@ -141,7 +138,7 @@ Zyklus wird ständig wiederholt $\Rightarrow$ wenn alle Ebenen richtig funktioni
 \paragraph{Sensorwerte von mehreren Sensoren}
 \begin{itemize}
 	\item Der Roboter muss auch bei inkonsistenten Informationen eine Entscheidung fällen
-	\item Die Subsumption-Architektur sieht keine zentrale Verarbeitung und Speichung der Umweltdaten
+	\item Die Subsumption-Architektur sieht keine zentrale Verarbeitung und Speichung der Umweltdaten vor
 	\item Jedes Modul reagiert nur auf die Daten einzelner Sensoren, es muss \textbf{kein konsistentes Abbild der Umwelt erschaffen werden}
 \end{itemize}
 \paragraph{Erweiterbarkeit}

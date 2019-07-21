@@ -3,7 +3,7 @@
 Man unterscheidet zwischen Algorithmen für:
 \begin{itemize}
 	\item \textbf{bekannte Umgebungen} (auch während der Fahrt ändert sich die Umgebung nicht)
-	\item \textbf{unbekannt Umgebung}
+	\item \textbf{unbekannte Umgebungen}
 \end{itemize}
 \begin{itemize}
 	\item Gebiet \textbf{vollständig bekannt} $\Rightarrow$ Lösung der Suche mittels eines Graphen.
@@ -18,7 +18,6 @@ Man unterscheidet zwischen Algorithmen für:
 	\subitem Roboter wird nah an einem Objekt (Wand, Hinderniss) entlang bewegt
 	\subitem Es sollte möglichst ein gegebener Abstand $d$ eingehalten werden
 \end{itemize}
-\newpage
 \paragraph{Regelung des Abstands d}
 \begin{lstlisting}
 IF (Distance to Wall > d) 
@@ -30,8 +29,9 @@ IF (Distance to Wall < d)
 IF (Distance to Wall == d) 
 	THEN Drive straight ahead
 \end{lstlisting}
+\newpage
 \subsection{Sensorbasierte Planer - Navigation mit Hinderniskontakt}
-\paragraph{Bug1 Algorithmus}
+\subsubsection{Bug1 Algorithmus}
 Fordert zwei bestimmte Verhalten:
 \begin{itemize}
 	\item bewege dich auf einer geraden Linie
@@ -44,7 +44,7 @@ Fordert zwei bestimmte Verhalten:
 		\label{fig:PNG/Bug1.png}
 	\end{center}
 \end{figure}
-\paragraph{Vorraussetungen}
+\paragraph{Vorraussetzungen}
 \begin{itemize}
 	\item Roboter benötigt einen Sensor zur Erkennung eines \enquote{Kontakts} mit einem Hindernis
 	\item Roboter kann die Distanz zwischen zwei Punkten x und y messen
@@ -54,11 +54,11 @@ Fordert zwei bestimmte Verhalten:
 \begin{itemize}
 	\item Roboter folgt Linie zum Ziel bis er beim Punkt $q_1^H$ auf ein Hinderniss trifft
 	\item Roboter umfährt das Hindernis bis er erneut beim gleichen Punkt auf das Hindernis trifft
-	\item Roboter bestimmt den nähesten Punkt (Leavepoint) $q_1^H$ vom Hindernis zum Ziel und fährt diesen Punkt an
+	\item Roboter bestimmt den nähesten Punkt (Leavepoint) $q_1^L$ vom Hindernis zum Ziel und fährt diesen Punkt an
 	\item Von diesem Punkt fährt der Roboter geradewegs zum Ziel bis er das Ziel erreicht oder erneut auf ein Hindernis trifft
 \end{itemize}
 \paragraph{Exception}
-Schneided die Linie von $q1^L$ zum Ziel das \textbf{akutelle Hindernis} gibt es keine Lösung
+Schneidet die Linie von $q1^L$ zum Ziel das \textbf{aktuelle Hindernis} gibt es keine Lösung
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.4]{Resources/PNG/Exception1.PNG}
@@ -66,7 +66,7 @@ Schneided die Linie von $q1^L$ zum Ziel das \textbf{akutelle Hindernis} gibt es 
 		\label{fig:PNG/Exception1.PNG}
 	\end{center}
 \end{figure}
-\paragraph{Bug2-Algorithmus}
+\subsubsection{Bug2-Algorithmus}
 \textbf{Idee:}
 \begin{itemize}
 	\item Linie vom Start $S$ zum Ziel $T$ konstruieren
@@ -97,7 +97,7 @@ Schneided die Linie von $q1^L$ zum Ziel das \textbf{akutelle Hindernis} gibt es 
 \begin{itemize}
 	\item Bei Komplexen Hindernissen kann Ziel mit \textbf{Backtracking} gefunden werden
 \end{itemize}
-\paragraph{Bug3-Algorithmus}
+\subsubsection{Bug3-Algorithmus}
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.6]{Resources/PNG/Bug3.PNG}
@@ -127,7 +127,7 @@ Bei jeder Linksdrehung wird der Umdrehungszähler inkrementiert, bei jeder Recht
 	\item Bewege den Roboter geradeaus bis eine Wand erreicht ist
 	\item Folge der Wand bis Umdrehungszähler 0 ist
 \end{itemize}
-\paragraph{Verlassen eines Labyrinths mit Ariadnefaden}
+\paragraph{Verlassen eines Labyrinths mit Ariadenfaden}
 \begin{itemize}
 	\item \textbf{Ziel}: einen Weg zu einem versteckten Ziel im Labyrinth sowie wieder zurück zum Eingang finden ohne dass eine Karte des Labyrinths bekannt ist
 	\item \textbf{Idee}: Wenn man ein Labyrinth betritt Faden ausrollen $\Rightarrow$ zurückverfolgen bringt einen zurück zum Eingang.
@@ -202,7 +202,7 @@ Dies beinhaltet drei Unteraufgaben:
 	\item Quad-Bäume oder Octal-Bäume oder als Voronoidiagramme
 \end{itemize}
 \section{Algorithmen und Methoden}
-Für die folgenden Algorithmen und Methoden wird ausgeganen, dass Hindernisse bekannt sund und weder Position noch Form ändern
+Für die folgenden Algorithmen und Methoden wird ausgeganen, dass Hindernisse bekannt sind und weder Position noch Form ändern
 \paragraph{Zellzerlegungen} das Umgebungsmodell wird in sich nicht überlappende Zellen unterteilt, die als besetzt oder frei markiert sind
 \paragraph{Roadmaps}
 \begin{itemize}
@@ -215,18 +215,18 @@ Auf dieses Netzwerk können Standardmethoden der Graphentheorie, wie sie auch in
 	\item Wegsuche mit Umgehung von Hindernissen mit dem \textbf{Sichtbarkeitsgraph}
 	\item Wegsuche mittels eines \textbf{Voronoigraphen}, \textbf{Voronoidiagramms}
 \end{itemize}
-L\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des Roboters als Partikel in einem Feld.
+\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des Roboters als Partikel in einem Feld.
 \newpage
 \subsection{Dijkstra}
-\paragraph{Datenstrukturen}
-\begin{itemize}
-	\item \textbf{PriorityQueue} $Open$
-	\item \textbf{Aktueller Knoten} $n$
-	\item \textbf{Nachfolgerknoten} $n'$
-	\item \textbf{Vorgänger} $predecessor$
-	\item \textbf{Startknoten} $s$
-	\item \textbf{Kosten} $cost$
-\end{itemize}
+%\paragraph{Datenstrukturen}
+%\begin{itemize}
+%	\item \textbf{PriorityQueue} $Open$
+%	\item \textbf{Aktueller Knoten} $n$
+%	\item \textbf{Nachfolgerknoten} $n'$
+%	\item \textbf{Vorgänger} $predecessor$
+%	\item \textbf{Startknoten} $s$
+%	\item \textbf{Kosten} $cost$
+%\end{itemize}
 \paragraph{Funktionsweise}
 \begin{enumerate}
 	\item Alle Knoten werden als \textbf{unbesucht} markiert $\Rightarrow$ kreiert ein set namens \textbf{unbesuchtes Set}
@@ -243,19 +243,19 @@ L\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des R
 
 %TODO Algorithmus
 \subsection{A*}
-\paragraph{Datenstrukturen}
-\begin{itemize}
-	\item \textbf{PriorityQueue} $Open$
-	\item \textbf{List} $Closed$
-	\item \textbf{Aktueller Knotne} $n$
-	\item \textbf{Nachfolgerknoten} $n'$
-	\item \textbf{Vorgänge} $predecessor$
-	\item \textbf{Startknoten} $s$
-	\item \textbf{Kosten} $g = bekannte Kosten$, $h = Schätzkosten$, $f = Gesamtkosten$
-\end{itemize}
+%\paragraph{Datenstrukturen}
+%\begin{itemize}
+%	\item \textbf{PriorityQueue} $Open$
+%	\item \textbf{List} $Closed$
+%	\item \textbf{Aktueller Knotne} $n$
+%	\item \textbf{Nachfolgerknoten} $n'$
+%	\item \textbf{Vorgänge} $predecessor$
+%	\item \textbf{Startknoten} $s$
+%	\item \textbf{Kosten} $g = bekannte Kosten$, $h = Schätzkosten$, $f = Gesamtkosten$
+%\end{itemize}
 \paragraph{Funktionsweise}
 %TODO Algorithmus
-\subsection{Wegsuche und Umgehung bekannter Hindernisse mit dem Sichtgraph-Algorithmus}
+\subsection{Wegsuche mit dem Sichtgraph-Algorithmus}
 \paragraph{Visibility Map}
 \begin{itemize}
 	\item enthält Eckpunkte von Polygonen, den Ecken der Hindernisse
@@ -268,7 +268,6 @@ L\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des R
 	\item die Kanten sind Liniensegmente, die zwei Knoten in Sichtweite verbinden
 	\item Hinderniskanten sind Teil des Sichtgraphen
 \end{itemize}
-\newpage
 \paragraph{Sichtgraphenalgorithmus}
 \begin{itemize}
 	\item verbinde \textbf{Start-}, \textbf{Zielpunkte} und die \textbf{Ecken} der Hindernisse durch Geraden, die nicht durch Hindernisse laufen dürfen
@@ -284,7 +283,6 @@ L\paragraph{Potentialfeldmethoden} beinhalten die physikalische Simulation des R
 		\label{fig:PNG/Sichtgraphalgorithmus.PNG}
 	\end{center}
 \end{figure}
-\newpage
 \paragraph{Reduzierter Visibility Graph}
 Definition von \textbf{unterstützenden} und \textbf{trennenden} Kanten:
 \begin{itemize}
@@ -305,13 +303,11 @@ Der reduzierte Sichtgraph besteht nur aus unterstützenden und trennenden Kanten
 	\item \textbf{Nachteil}: Komplexität O($n^3$)
 	\item \textbf{Effizienter}: Plane Sweep Algorithmus mit Komplexität O($n^2 log n$)
 \end{itemize}
-\newpage
 \paragraph{Algorithmus}
 \begin{itemize}
 	\item \textbf{Input}: A  set of vertices ${v_i}$ (whose edges do not intersect) and a vertex $v$
 	\item \textbf{Output}: A subset of vertices from ${v_i}$ that are within line of sight of $v$
 \end{itemize}
-
 \begin{itemize}
 	\item For each vertex $v_i$, calculate $\alpha$, the angle from the horizontal axis to the line segment $\overline{vv_i}$
 	\item Create the vertex list $\epsilon$, containing the $\alpha_i$'s sorted in increasing order.
@@ -400,7 +396,7 @@ Die Berechnung des optimalen Weges auf dem Voronoi-Diagram kann mit üblichen Gr
 \end{figure}
 \paragraph{Alternativer Wave Front Planer}
 Siehe Ursprungsfolie Kapitel 5, Seite 29/30
-\subsection{PotentialFeldmethode}
+\subsection{Potentialfeld methode}
 \paragraph{Grundidee}
 \begin{itemize}
 	\item Vorbild: \textbf{Elektrisches Feld}

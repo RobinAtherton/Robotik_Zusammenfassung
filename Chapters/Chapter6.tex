@@ -3,13 +3,13 @@
 \paragraph{Sensordaten} 
 Roboter empfängt regelmäßig Sensordaten, jedoch mit Unsicherheit behaftet.
 \paragraph{Steuerdaten}
-Roboter führt regelmäßig Bewegungen mit Steuerdaten $u_k$ durch, aber entsprechen nicht exakt den vorgegebenen Steuerdaten.
+Roboter führt regelmäßig Bewegungen mit Steuerdaten $u_k$ durch, aber diese entsprechen nicht exakt den vorgegebenen Steuerdaten.
 \paragraph{Position und Umgebungsmodell}
 Position schätzt seine globale Position aufgrund der Sensor- und Steuerdaten in seiner Umgebungskarte, jedoch auch mit Unsicherheit behaftet
 \section{Modellierung von Unsicherheit}
 \begin{itemize}
 	\item Viele Aussagen bei mobilen Robotern sind unsicher 
-	\item \textbf{Grundlegende Idee} Modellierung von Unsicherheiten durch Wahrscheinlichkeiten
+	\item \textbf{Grundlegende Idee}: Modellierung von Unsicherheiten durch Wahrscheinlichkeiten
 	\item Interpretierung der eigentlichen Lokalisierung als Wahrscheinlichkeitsdichte-Problem
 	\item Auch bei weniger präzisen Umgebungsmodellen einsetzbar
 	\item Sie erlauben es, den Zustand eines \textbf{dynamischen Systems} probabilistisch zu schätzen
@@ -24,7 +24,7 @@ $p (A|B) = p(B|A) * \dfrac{p(A)}{p(B)}$
 \subsection{Evidence Grids}
 \begin{itemize}
 	\item \textbf{Problem}: reale Sensordaten erhalten häufig Rauschen; Rauschen bei Sensordaten führt zu Abweichungen des Idealwerts $\Rightarrow$ schwerwiegende Fehler
-	\item Umgebung wird in eine zweidimensionalen Gitternetz repräsentiert
+	\item Umgebung wird in einem zweidimensionalen Gitternetz repräsentiert
 	\item \textbf{Occupancy Grids (Belegungsraster)} speichern in jeder Zelle, ob der Weg für einen Roboter frei oder blockiert ist (\textbf{Binär})
 	\item \textbf{Evidence Grids (Beweisraster)} Untermenge der Occupancy Grids. Sammeln Beweismaterial und erstellen damit Karten (\textbf{Belegte Zellen nach Satz von Bayes})
 	\item Anhand von Sensordaten wird die Umgebung in einzelne Kartenzellen zergliedert, denen jeweil eine Besetzwahrscheinlichkeit der näheren Umgebung zugewiesen wird.
@@ -34,18 +34,18 @@ $p (A|B) = p(B|A) * \dfrac{p(A)}{p(B)}$
 	\item Die Information über das Verhalten des Sensors wird mit einbezogen
 \end{itemize}
 \[
-	z(x,y)= \frac{p(Zelle belegt \ | \ Sensorwert)}{p(Zelle \ nicht \ belegt \ | \ Sensorwert)}
+	z(x,y)= \frac{p(Zelle \ belegt \ | \ Sensorwert)}{p(Zelle \ nicht \ belegt \ | \ Sensorwert)}
 \]
 \begin{itemize}
 	\item Die Anwendung des Satzes von Bayes auf diese Formel führt letztlich zu:
 \end{itemize}
 \[
-	z(x,y) = \frac{p(Sensorwert \ | \ Zelle  \ belegt) * p(Zelle \ belegt)}{p(Sensorwert \ | \ Zelle \ nicht \ belegt) * p(Zelle \ nicht \ belegt}
+	z(x,y) = \frac{p(Sensorwert \ | \ Zelle  \ belegt) * p(Zelle \ belegt)}{p(Sensorwert \ | \ Zelle \ nicht \ belegt) * p(Zelle \ nicht \ belegt)}
 \]
 \begin{itemize}
 	\item Die Wahrscheinlichkeit, dass eine Zelle belegt ist oder nicht belegt ist, wird zu Beginn mit 0.5 angenommen
 	\item Dieser Wert wird fortlaufend mittels der aktuellen Sensorwerte aktualisiert.
-	\item Die direkte Anwendung des Bayessischen Filters auf das Selbstlokalisierungsproblem ergibt sich die sogenannte Markov-Lokalisierung
+	\item Die direkte Anwendung des Bayessischen Filters auf das Selbstlokalisierungsproblem ergibt sich die sogenannte \textbf{Markov-Lokalisierung}
 \end{itemize}
 \section{Bayes-Filter Algorithmus}
 \subsection{Algorithmus}
@@ -58,6 +58,7 @@ $p (A|B) = p(B|A) * \dfrac{p(A)}{p(B)}$
 	\item bei $(x_t) = p(x_t |z_1:t, u_1:t)$ ist die \textbf{Wahrscheinlichkeitsverteilung} über den \textbf{Zustand $x_t$ zum Zeitpunkt $t$}, abhängig von allen vergangenen Sensorinformationen $Z_1:t$ und Kontrolldaten $u_1:t$ 
 \end{itemize}
 %Funktionsweise Siehe Seite 6-8
+\newpage
 \section{Markov Lokalisierung}
 \subsection{Algorithmus}
 \begin{itemize}
@@ -74,7 +75,7 @@ $p (A|B) = p(B|A) * \dfrac{p(A)}{p(B)}$
 \end{itemize}
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.4]{Resources/PNG/MarkovAlgorithmus.PNG}
+		\includegraphics[scale=0.6]{Resources/PNG/MarkovAlgorithmus.PNG}
 		\caption{Markov Algorithmus}
 		\label{fig:Resources/PNG/MarkovAlgorithmus.PNG}
 	\end{center}
@@ -173,13 +174,13 @@ $p (A|B) = p(B|A) * \dfrac{p(A)}{p(B)}$
 	\item \textbf{Gesucht} Karte $m$ mit $M$ Landmarken: $m = l_1, x, l_1, y, ..., l_M,x,l_M,y$
 	\item Weg des Roboters $x_1, x_2, ... x_k$
 \end{itemize}
-\paragraph{Probablisistische Algorithmen}
+\paragraph{Probabilistische Algorithmen}
+Ungenauigkeiten in den Messdaten werden durch Wahrscheinlichkeitsverteilungen modelliert
 \begin{itemize}
-	\item Ungenauigkeiten in den Messdaten werden durch Wahrscheinlichkeitsverteilungen modelliert
-	\subitem bekannt sind die \textbf{Roboter Bewegungsbefehle} (die Kontrolldaten, die Steuerkommandos $u_t$)
-	\subitem bekannt sind die \textbf{Beobachtungen} $z_t$ der nahe gelegnen \textbf{Landmarken} bestehend aus Entfernung und Winkel
-	\subitem die Sensorik kann sowohl die Beobachtungsrichtung als auch die beobachtete Entfernung einer Landmarke zur Verfügung stellen
-	\subitem gesucht ist eine Schätzung der Karte der Merkmale, der Landmarkenpositionen, sowie der Pfad des Roboters, d.h. seine aktuelle und frühere Posen
+	\item bekannt sind die \textbf{Roboter Bewegungsbefehle} (die Kontrolldaten, die Steuerkommandos $u_t$)
+	\item bekannt sind die \textbf{Beobachtungen} $z_t$ der nahe gelegnen \textbf{Landmarken} bestehend aus Entfernung und Winkel
+	\item die Sensorik kann sowohl die Beobachtungsrichtung als auch die beobachtete Entfernung einer Landmarke zur Verfügung stellen
+	\item gesucht ist eine Schätzung der Karte der Merkmale, der Landmarkenpositionen, sowie der Pfad des Roboters, d.h. seine aktuelle und frühere Posen
 \end{itemize}
 \subsection{Problemstellung}
 \begin{itemize}
