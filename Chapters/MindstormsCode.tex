@@ -1,0 +1,403 @@
+\chapter{Lego Mindstorms Code}
+\vspace{-40px}
+\section{SubSumptionMain}
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class SubsumptionMain {
+    public static void main(final String[] args) throws InterruptedException {
+        final Effector[] effectors = {
+                Effector.make("Lamp"),
+                Effector.make("Chassis")};
+        final Arbitrator arbitrator = new Arbitrator(effectors);
+        int priority = 1;
+        final Behavior[] behaviors = {
+				Behavior.make(Behavior.BLINK, arbitrator, priority++),
+				Behavior.make(Behavior.STEER_RIGHT, arbitrator, priority),
+				Behavior.make(Behavior.STEER_LEFT, arbitrator, priority++),
+				Behavior.make(Behavior.TURN_LEFT, arbitrator, priority++),
+                Behavior.make(Behavior.GO, arbitrator, priority++),
+                Behavior.make(Behavior.STOP, arbitrator, priority++),
+                Behavior.make(Behavior.KILLER, arbitrator, priority++)
+        };
+        final SubSensor[] sensors = {
+                SubSensor.make(SubSensor.BUTTON_SENSOR, behaviors),
+                SubSensor.make(SubSensor.COLLISION_SENSOR, behaviors),
+                SubSensor.make(SubSensor.ULTRASOUND_SENSOR, behaviors)
+        };
+        for (final SubSensor sensor : sensors) {
+            assert sensor != null;
+            sensor.start();
+        }
+        arbitrator.waitUntilDie();
+    }
+}
+\end{lstlisting}
+
+\section{Arbitrator}
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class Arbitrator {
+    private final int MAX_PRIO = 10;
+    private final Wish[] wishes = new Wish[MAX_PRIO];
+    private final Effector[] effectors;
+
+    Arbitrator(Effector[] effectors) { this.effectors = effectors; }
+
+    public synchronized void accept(final Wish wish, final int priority) {
+        if (wish == Wish.DIE) { 
+			justDieAlready(); 
+		} else if (wish == Wish.NOTHING) {
+			wishes[priority] = null;
+		} else {
+            wishes[priority] = wish;
+            boolean wishHasTopPriority = true;
+            for (int p = priority + 1; p < MAX_PRIO; p++) {
+                if (wishes[p] != null) {
+                    wishHasTopPriority = false;
+                    break;
+                }
+            }
+            if (wishHasTopPriority) {
+                for (final Effector effector : effectors) {
+                    effector.accept(wish);
+                }
+            }
+        }
+    }
+    public void justDieAlready() { notifyAll(); }
+    public void waitUntilDie() throws InterruptedException { wait(); }
+}
+\end{lstlisting}
+
+\section{Wishes}
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public enum Wish {
+	FORWARD, STOP, LEDGREEN, LEDOFF, TURN_LEFT, STEER_LEFT, STEER_RIGHT, NOTHING, DIE
+}
+\end{lstlisting}
+
+\section{Behaviors}
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public abstract class Behavior {
+	private final Arbitrator arbitrator;
+	private final int priority;
+	private final Reading type;
+	private int readingValue;
+
+	public Behavior(final Arbitrator arbitrator, final int priority, final Reading type) {
+		this.arbitrator = arbitrator;
+		this.priority = priority;
+		this.type = type;
+	}
+
+	public synchronized void accept(final Reading type, final int readingValue) {
+		if (this.type == type) {
+			this.readingValue = readingValue;
+			onAccept(readingValue);
+		}
+	}
+
+	abstract void onAccept(final int readingValue);
+
+	void sendWish(final Wish wish) {
+		//System.out.println("sending wish: " + wish);
+		arbitrator.accept(wish, priority);
+	}
+
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class Go extends Behavior {
+
+	Go(Arbitrator arbitrator, int priority) {
+		super(arbitrator, priority, Reading.Button);
+	}
+
+	@Override
+	void onAccept(final int buttonValue) {
+		if (buttonValue != Button.ID_ENTER) {
+			sendWish(Wish.FORWARD);
+			sendWish(Wish.NOTHING);
+		}
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class Killer extends Behavior {
+
+	public Killer(final Arbitrator arbitrator, final int priority) {
+		super(arbitrator, priority, Reading.Button);
+	}
+
+	@Override
+	void onAccept(final int readingValue) {
+		if (readingValue == Button.ID_ESCAPE) {
+			sendWish(Wish.DIE);
+		}
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+class SteerLeft extends Behavior {
+
+    SteerLeft(Arbitrator arbitrator, int priority) {
+        super(arbitrator, priority, Reading.Distance);
+    }
+
+    @Override
+    void onAccept(final int distanceValue) {
+        if (distanceValue == UltrasoundSensor.TOO_CLOSE) {
+            sendWish(Wish.STEER_LEFT);
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+class Stop extends Behavior {
+
+    Stop(final Arbitrator arbitrator, final int priority) {
+        super(arbitrator, priority, Reading.Button);
+    }
+
+    @Override
+    void onAccept(final int buttonValue) {
+        if (buttonValue == Button.ID_DOWN) {
+            sendWish(Wish.STOP);
+            sendWish(Wish.LEDOFF);
+            sendWish(Wish.NOTHING);
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Effectors}
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class Chassis extends Effector {
+    private static final double STEERING_FACTOR = 0.5;
+    private static final int STEERING_TIME = 40;
+    private static final float FRICTION = 1.5f;
+
+    private final RegulatedMotor motorA = new EV3LargeRegulatedMotor(MotorPort.A);
+    private final RegulatedMotor motorD = new EV3LargeRegulatedMotor(MotorPort.D);
+
+    @Override
+    public void accept(final @NotNull Wish command) {
+        if (command == Wish.FORWARD) {
+            forward();
+        } else if (command == Wish.STOP) {
+            stop();
+        } else if (command == Wish.TURN_LEFT) {
+            turnLeft();
+        } else if (command == Wish.STEER_LEFT) {
+            steerLeft();
+        } else if (command == Wish.STEER_RIGHT) {
+            steerRight();
+        }
+    }
+
+    private void steerRight() {
+        //System.out.println("steerRight");
+        int originSpeed = motorA.getSpeed();
+        motorA.setSpeed((int) (originSpeed * STEERING_FACTOR));
+        try {
+            Thread.sleep(STEERING_TIME);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        motorA.setSpeed(originSpeed);
+    }
+
+    private void steerLeft() {
+        //System.out.println("steerLeft");
+        int originSpeed = motorD.getSpeed();
+        motorD.setSpeed((int) (originSpeed * STEERING_FACTOR));
+        try {
+            Thread.sleep(STEERING_TIME);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        motorD.setSpeed(originSpeed);
+    }
+
+    private void stop() {
+        motorA.stop();
+        motorD.stop();
+    }
+
+    private void forward() {
+        motorA.forward();
+        motorD.forward();
+    }
+
+    private void turnLeft() {
+        motorA.backward();
+        motorD.backward();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        motorA.rotate((int) (360 * FRICTION));
+        motorD.stop();
+
+        forward();
+    }
+
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+class Lamp extends Effector
+{
+	@Override
+	public void accept(Wish command)
+	{
+		switch (command){
+			case LEDGREEN:
+				Button.LEDPattern(1);
+				break;
+			case LEDOFF:
+				Button.LEDPattern(0);
+				break;
+			default: //not my command
+				break;
+		}
+	}
+
+}
+\end{lstlisting}
+
+\section{Sensors}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public abstract class SubSensor extends Thread {
+
+	public static final String BUTTON_SENSOR = "ButtonSensor";
+	public static final String COLLISION_SENSOR = "CollisionSensor";
+	public static final String ULTRASOUND_SENSOR = "UltrasoundSensor";
+	private final @NotNull Behavior[] behaviors;
+
+	private final @NotNull Reading type;
+
+	public SubSensor(final @NotNull Behavior[] behaviors, final @NotNull Reading type) {
+		this.behaviors = behaviors;
+		this.type = type;
+		setDaemon(true);
+	}
+
+	void send(final int value) {
+		for (final Behavior behavior : behaviors) {
+			behavior.accept(type, value);
+		}
+	}
+
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class ButtonSensor extends SubSensor {
+
+    public ButtonSensor(final Behavior[] behaviors) {
+        super(behaviors, Reading.Button);
+    }
+
+    public void run() {
+        while (true) {
+            int button = Button.waitForAnyPress();
+            send(button);
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class CollisionSensor extends SubSensor {
+    public static final int COLLISION = 1;
+    public static final int NO_COLLISION = 0;
+    private final float[] floats;
+
+    private SensorModes sensor1 = new EV3TouchSensor(SensorPort.S1);
+    private SampleProvider touch1 = sensor1.getMode("Touch");
+    private SensorModes sensor2 = new EV3TouchSensor(SensorPort.S4);
+    private SampleProvider touch2 = sensor2.getMode("Touch");
+
+    public CollisionSensor(Behavior[] behaviors) {
+        super(behaviors, Reading.Collision);
+        floats = new float[1];
+    }
+
+    public void run() {
+        while (true) {
+            touch1.fetchSample(floats, 0);
+            if (floats[0] == COLLISION) {
+                send(COLLISION);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            touch2.fetchSample(floats, 0);
+            if (floats[0] == COLLISION) {
+                send(COLLISION);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+    }
+\end{lstlisting}
+
+\begin{lstlisting}[caption={}, captionpos=, label={lst:}, language=java]
+public class UltrasoundSensor extends SubSensor {
+    private final float[] floats;
+    public static final int TOO_CLOSE = 0;
+    public static final int PERFECT = 1;
+    public static final int TOO_FAR = 2;
+    public static final int NEAR_BORDER = 5;
+    public static final int DISTANT_BORDER = 8;
+    public static final int SCALE_TO_CM = 100;
+
+    private SensorModes sensor3 = new EV3UltrasonicSensor(SensorPort.S3);
+    private SampleProvider ultrasonic = sensor3.getMode("Distance");
+
+    public UltrasoundSensor(Behavior[] behaviors) {
+        super(behaviors, Distance);
+        floats = new float[1];
+    }
+
+    public void run(){
+        float distance = 10;
+        float sample[] = new float[ultrasonic.sampleSize()];
+        while (true){
+            ultrasonic.fetchSample(sample, 0);
+            distance = sample[0] * SCALE_TO_CM;
+
+            if (distance <= NEAR_BORDER) {
+                send(TOO_CLOSE);
+            } else if (distance <= DISTANT_BORDER) {
+                send(PERFECT);
+            } else {
+                send(TOO_FAR);
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+\end{lstlisting}
+
+
+
